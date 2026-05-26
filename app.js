@@ -190,9 +190,17 @@ function startSession() {
     missedCards = [];
 
     if (sessionMode === 'trainer') {
-        // Trainer mode is night signals primarily
+        // First add all night signals
         allCardIds.forEach(id => {
             currentQueue.push({ cardId: id, type: 'night' });
+        });
+        
+        // Then add all day signals (cards 1-30)
+        allCardIds.forEach(id => {
+            const num = parseInt(id);
+            if (num <= 30) {
+                currentQueue.push({ cardId: id, type: 'day' });
+            }
         });
         
         if (trainerOrder === 'shuffle') {
@@ -298,18 +306,22 @@ function loadTrainerCard() {
     const item = currentQueue[currentIndex];
     const card = cardsData[item.cardId];
 
-    // Set Front Side Image
-    trainerImg.src = `images/night/NightSignal${item.cardId}.gif`;
-    trainerImg.alt = `R.O.R. Night Signal Card #${item.cardId}`;
+    // Set Front Side Image and Label based on signal type
+    if (item.type === 'day') {
+        trainerImg.src = `images/day/DayImage${item.cardId}.gif`;
+        trainerImg.alt = `R.O.R. Day Signal Card #${item.cardId}`;
+        trainerCardLabel.textContent = `Day Signal #${item.cardId}`;
+    } else {
+        trainerImg.src = `images/night/NightSignal${item.cardId}.gif`;
+        trainerImg.alt = `R.O.R. Night Signal Card #${item.cardId}`;
+        trainerCardLabel.textContent = `Night Signal #${item.cardId}`;
+    }
     
     // Fallback if image doesn't exist
     trainerImg.onerror = () => {
         trainerImg.src = 'data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="284" height="180" viewBox="0 0 284 180"><rect width="100%" height="100%" fill="%23111"/><text x="50%" y="50%" dominant-baseline="middle" text-anchor="middle" fill="%23555" font-family="sans-serif" font-size="14">Image Missing</text></svg>';
     };
 
-    // Label Front
-    trainerCardLabel.textContent = `Night Signal #${item.cardId}`;
-    
     // Populate Back Info Panel
     trainerBackTitle.textContent = `Signal Reference Details (Card #${item.cardId})`;
     trainerInfoIdent.textContent = card.identification || 'No identification text.';
@@ -317,15 +329,9 @@ function loadTrainerCard() {
     trainerInfoDay.textContent = card.day_signal || 'No day signal shape.';
     trainerInfoFog.textContent = card.fog_signal || 'No fog signal.';
 
-    // Manage Prev/Next disabled states
-    btnTrainerPrev.disabled = currentIndex === 0;
-    
-    // Change next button to "Finish" or icon on last card
-    if (currentIndex === currentQueue.length - 1) {
-        btnTrainerNext.innerHTML = `Finish <i class="fa-solid fa-flag-checkered"></i>`;
-    } else {
-        btnTrainerNext.innerHTML = `Next <i class="fa-solid fa-arrow-right"></i>`;
-    }
+    // Manage Prev/Next states (always enabled to support wrapping loop)
+    btnTrainerPrev.disabled = false;
+    btnTrainerNext.innerHTML = `Next <i class="fa-solid fa-arrow-right"></i>`;
 }
 
 function toggleCardFlip() {
@@ -333,16 +339,20 @@ function toggleCardFlip() {
 }
 
 function navigateTrainer(direction) {
-    const nextIdx = currentIndex + direction;
+    let nextIdx = currentIndex + direction;
     
-    if (nextIdx >= 0 && nextIdx < currentQueue.length) {
+    if (nextIdx >= currentQueue.length) {
+        // Wrap around to start
+        currentIndex = 0;
+    } else if (nextIdx < 0) {
+        // Wrap around to end
+        currentIndex = currentQueue.length - 1;
+    } else {
         currentIndex = nextIdx;
-        loadTrainerCard();
-        updateProgressBar();
-    } else if (nextIdx >= currentQueue.length) {
-        // Reached end of trainer deck
-        showResults();
     }
+    
+    loadTrainerCard();
+    updateProgressBar();
 }
 
 /* ==========================================================================
