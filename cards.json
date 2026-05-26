@@ -242,33 +242,6 @@
       "type_of_vessel": "Trawler",
       "maneuvering_status": "Underway (Making Way)",
       "seen_from": "seen end on"
-    },
-    "8": {
-      "identification": "v/I fishing with nets or lines extending > 150 m horizontally from v/I, underway or at anchor, seen from stbd side.",
-      "action": "Two short blasts, a/c to port away from gear.",
-      "lights_displayed": "All round red over white Its in vert line. Making way - side Its and stern It. All round white It in direction of gear.",
-      "fog_signal": "One prolonged and two short blasts.",
-      "type_of_vessel": "Fishing Vessel (not trawling)",
-      "maneuvering_status": "At Anchor",
-      "seen_from": "seen from starboard side"
-    },
-    "10": {
-      "identification": "v/I fishing with nets or lines extending > 150 m horizontally from v/I, underway or at anchor, seen from port side.",
-      "action": "One short blast, a/c to stbd away from gear.",
-      "lights_displayed": "All round red over white Its in vert line. Making way - side Its and stern It. All round white It in direction of gear.",
-      "fog_signal": "One prolonged and two short blasts.",
-      "type_of_vessel": "Fishing Vessel (not trawling)",
-      "maneuvering_status": "At Anchor",
-      "seen_from": "seen from port side"
-    },
-    "27": {
-      "identification": "Trawler, underway or at anchor, nets fast on obstruction, seen from stbd side.",
-      "action": "Two short blasts, a/c to port, pass well clear.",
-      "lights_displayed": "All round green over white Its in vert line. Masthead light abaft of and higher than green light. Making way - side Its and stern It. Two all round white Its in vertical line at lower level than green and white Its.",
-      "fog_signal": "One prolonged and two short blasts.",
-      "type_of_vessel": "Trawler",
-      "maneuvering_status": "Dredging / Obstruction operations",
-      "seen_from": "seen from starboard side"
     }
   },
   "night": {
