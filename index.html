@@ -272,18 +272,25 @@
                 <div class="form-group">
                     <label class="section-label">Select Category</label>
                     <div class="toggle-buttons-group">
-                        <button type="button" id="btn-cat-colregs" class="toggle-btn active">
-                            <i class="fa-solid fa-anchor"></i>
+                        <button type="button" id="btn-cat-day" class="toggle-btn active">
+                            <i class="fa-solid fa-sun"></i>
                             <div>
-                                <strong>COLREGs Signals</strong>
-                                <span>Day & Night Collision Regulation Signals.</span>
+                                <strong>Day Signals</strong>
+                                <span>Day Shapes and Collision Regulation Signals (1–30).</span>
+                            </div>
+                        </button>
+                        <button type="button" id="btn-cat-night" class="toggle-btn">
+                            <i class="fa-solid fa-moon"></i>
+                            <div>
+                                <strong>Night Signals</strong>
+                                <span>Night Lights and Collision Regulation Signals (1–225).</span>
                             </div>
                         </button>
                         <button type="button" id="btn-cat-iala" class="toggle-btn">
                             <i class="fa-solid fa-circle-nodes"></i>
                             <div>
                                 <strong>IALA Buoyage System</strong>
-                                <span>Lateral, Cardinal, Safe Water, and Special Buoys (Pages 1–10).</span>
+                                <span>Lateral, Cardinal, Safe Water, and Special Buoys (1–40).</span>
                             </div>
                         </button>
                     </div>
@@ -333,7 +340,7 @@
 
                 <!-- Quiz Specific Options -->
                 <div id="group-quiz-options" class="form-group hidden slide-in">
-                    <div class="option-row">
+                    <div class="option-row" style="display: none !important;">
                         <div class="option-label-col">
                             <strong>Include Day Signals</strong>
                             <span>Include cards 1–30's day shapes inside the quiz pool.</span>
@@ -344,7 +351,7 @@
                         </label>
                     </div>
 
-                    <div class="option-row" style="margin-top: 1.5rem;">
+                    <div class="option-row" style="margin-top: 0rem;">
                         <div class="option-label-col">
                             <strong>Number of Questions</strong>
                             <span>Select the length of your evaluation.</span>

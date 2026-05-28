@@ -9,7 +9,7 @@ let currentIndex = 0;
 let quizScore = 0;
 let quizAnswers = []; // { cardId, type, correct }
 let missedCards = []; // List of missed cardIds
-let selectedCategory = 'colregs'; // 'colregs' | 'iala'
+let selectedCategory = 'day'; // 'day' | 'night' | 'iala'
 let trainerRotation = 0;
 let quizRotation = 0;
 
@@ -28,7 +28,8 @@ const progressText = document.getElementById('progress-text');
 const progressPercent = document.getElementById('progress-percent');
 
 // Category & Rotate Elements
-const btnCatColregs = document.getElementById('btn-cat-colregs');
+const btnCatDay = document.getElementById('btn-cat-day');
+const btnCatNight = document.getElementById('btn-cat-night');
 const btnCatIala = document.getElementById('btn-cat-iala');
 const btnTrainerRotate = document.getElementById('btn-trainer-rotate');
 const btnQuizRotate = document.getElementById('btn-quiz-rotate');
@@ -111,12 +112,23 @@ async function fetchCardsData() {
 // Setup all event listeners
 function setupEventListeners() {
     // Category toggles
-    btnCatColregs.addEventListener('click', () => {
-        selectedCategory = 'colregs';
-        btnCatColregs.classList.add('active');
+    btnCatDay.addEventListener('click', () => {
+        selectedCategory = 'day';
+        btnCatDay.classList.add('active');
+        btnCatNight.classList.remove('active');
         btnCatIala.classList.remove('active');
         
-        // Re-enable quiz mode button
+        btnModeQuiz.disabled = false;
+        btnModeQuiz.style.opacity = '';
+        btnModeQuiz.style.pointerEvents = '';
+    });
+
+    btnCatNight.addEventListener('click', () => {
+        selectedCategory = 'night';
+        btnCatNight.classList.add('active');
+        btnCatDay.classList.remove('active');
+        btnCatIala.classList.remove('active');
+        
         btnModeQuiz.disabled = false;
         btnModeQuiz.style.opacity = '';
         btnModeQuiz.style.pointerEvents = '';
@@ -125,15 +137,12 @@ function setupEventListeners() {
     btnCatIala.addEventListener('click', () => {
         selectedCategory = 'iala';
         btnCatIala.classList.add('active');
-        btnCatColregs.classList.remove('active');
+        btnCatDay.classList.remove('active');
+        btnCatNight.classList.remove('active');
 
-        // Enable quiz mode button for IALA category
         btnModeQuiz.disabled = false;
         btnModeQuiz.style.opacity = '';
         btnModeQuiz.style.pointerEvents = '';
-
-        // Keep current session mode (trainer or quiz) as selected by user
-        // No longer force trainer mode or disable quiz button
     });
 
     // Mode toggles in startup menu
@@ -225,95 +234,95 @@ function startSession() {
 
     if (selectedCategory === 'iala') {
         // Build IALA card queue (front/back images)
-        for (let i = 1; i <= 5; i++) {
+        for (let i = 1; i <= 40; i++) {
             currentQueue.push({
                 cardId: i.toString(),
                 type: 'iala',
-                front: `images/iala/page_${(i * 2) - 1}.jpg`,
-                back: `images/iala/page_${i * 2}.jpg`
+                front: `images/iala/question_${i}.png`,
+                back: `images/iala/answer_${i}.png`
             });
         }
-        if (trainerOrder === 'shuffle') {
+        if (trainerOrder === 'shuffle' || sessionMode === 'quiz') {
             shuffleArray(currentQueue);
         }
 
-        // Set badge based on the chosen mode
+        // For quiz mode, limit number of questions if required
+        if (sessionMode === 'quiz' && quizQuestionCount !== 'all') {
+            const count = parseInt(quizQuestionCount);
+            currentQueue = currentQueue.slice(0, Math.min(count, currentQueue.length));
+        }
+
         if (sessionMode === 'trainer') {
             sessionModeBadge.textContent = 'IALA Trainer';
             sessionModeBadge.className = 'badge badge-teal';
             showView('trainer');
             loadTrainerCard();
         } else {
-            // For Quiz mode, use the same trainer view as a placeholder
             sessionModeBadge.textContent = 'IALA Quiz';
             sessionModeBadge.className = 'badge';
-            showView('trainer');
-            loadTrainerCard();
+            showView('quiz');
+            loadQuizQuestion();
         }
-    } else {
-        // COLREGs Signals category
-        const allCardIds = Object.keys(cardsData.night || {}).sort((a, b) => parseInt(a) - parseInt(b));
-        if (allCardIds.length === 0) {
-            alert('Card data is empty. Please run extract_and_reclassify.py.');
+    } else if (selectedCategory === 'day') {
+        const dayCardIds = Object.keys(cardsData.day || {}).sort((a, b) => parseInt(a) - parseInt(b));
+        if (dayCardIds.length === 0) {
+            alert('Day card data is empty. Please check cards.json.');
             return;
         }
 
+        dayCardIds.forEach(id => {
+            currentQueue.push({ cardId: id, type: 'day' });
+        });
+
+        if (trainerOrder === 'shuffle' || sessionMode === 'quiz') {
+            shuffleArray(currentQueue);
+        }
+
+        if (sessionMode === 'quiz' && quizQuestionCount !== 'all') {
+            const count = parseInt(quizQuestionCount);
+            currentQueue = currentQueue.slice(0, Math.min(count, currentQueue.length));
+        }
+
         if (sessionMode === 'trainer') {
-            // First add all night signals
-            allCardIds.forEach(id => {
-                currentQueue.push({ cardId: id, type: 'night' });
-            });
-            
-            // Then add all day signals (cards 1-30)
-            allCardIds.forEach(id => {
-                const num = parseInt(id);
-                if (num <= 30) {
-                    if (cardsData.day[id]) {
-                        currentQueue.push({ cardId: id, type: 'day' });
-                    }
-                }
-            });
-            
-            if (trainerOrder === 'shuffle') {
-                shuffleArray(currentQueue);
-            }
-            
-            sessionModeBadge.textContent = 'Trainer Mode';
+            sessionModeBadge.textContent = 'Day Trainer';
             sessionModeBadge.className = 'badge badge-teal';
-            
             showView('trainer');
             loadTrainerCard();
         } else {
-            // Quiz mode: Assemble pool of questions
-            let questionPool = [];
-            
-            allCardIds.forEach(id => {
-                // Add night signal
-                questionPool.push({ cardId: id, type: 'night' });
-                
-                // Add day signal if requested and day shape exists (cards 1-30)
-                const num = parseInt(id);
-                if (quizIncludeDay && num <= 30) {
-                    if (cardsData.day[id]) {
-                        questionPool.push({ cardId: id, type: 'day' });
-                    }
-                }
-            });
-            
-            // Shuffle the entire pool
-            shuffleArray(questionPool);
-            
-            // Slice to requested size
-            if (quizQuestionCount !== 'all') {
-                const count = parseInt(quizQuestionCount);
-                currentQueue = questionPool.slice(0, Math.min(count, questionPool.length));
-            } else {
-                currentQueue = questionPool;
-            }
-
-            sessionModeBadge.textContent = 'Quiz Mode';
+            sessionModeBadge.textContent = 'Day Quiz';
             sessionModeBadge.className = 'badge';
-            
+            showView('quiz');
+            loadQuizQuestion();
+        }
+    } else {
+        // Night Signals category
+        const nightCardIds = Object.keys(cardsData.night || {}).sort((a, b) => parseInt(a) - parseInt(b));
+        if (nightCardIds.length === 0) {
+            alert('Night card data is empty. Please check cards.json.');
+            return;
+        }
+
+        nightCardIds.forEach(id => {
+            currentQueue.push({ cardId: id, type: 'night' });
+        });
+
+        if (trainerOrder === 'shuffle' || sessionMode === 'quiz') {
+            shuffleArray(currentQueue);
+        }
+
+        if (sessionMode === 'quiz' && quizQuestionCount !== 'all') {
+            const count = parseInt(quizQuestionCount);
+            currentQueue = currentQueue.slice(0, Math.min(count, currentQueue.length));
+        }
+
+        if (sessionMode === 'trainer') {
+            sessionModeBadge.textContent = 'Night Trainer';
+            sessionModeBadge.className = 'badge badge-teal';
+            showView('trainer');
+            loadTrainerCard();
+        } else {
+            sessionModeBadge.textContent = 'Night Quiz';
+            sessionModeBadge.className = 'badge';
             showView('quiz');
             loadQuizQuestion();
         }
@@ -519,6 +528,31 @@ function loadQuizQuestion() {
     if (currentQueue.length === 0 || currentIndex >= currentQueue.length) return;
     
     const item = currentQueue[currentIndex];
+    
+    if (item.type === 'iala') {
+        quizCardFailed = false;
+        
+        // Configure IALA specific static options
+        quizQuestionImg.src = `images/iala/question_${item.cardId}.png`;
+        quizQuestionImg.alt = `Quiz IALA Buoyage Card #${item.cardId}`;
+        quizCardNumberLabel.textContent = `IALA Card #${item.cardId}`;
+        quizQuestionTypeBadge.textContent = 'IALA Buoyage';
+        quizQuestionTypeBadge.className = 'badge badge-teal';
+        
+        quizPromptText.textContent = "Can you identify this buoy? Study it and click below to show the answer.";
+        
+        // Show only the "Show Answer" button
+        quizOptionsContainer.innerHTML = '';
+        const btnShow = document.createElement('button');
+        btnShow.type = 'button';
+        btnShow.className = 'btn btn-primary btn-large';
+        btnShow.style.width = '100%';
+        btnShow.innerHTML = `<i class="fa-solid fa-eye"></i> Show Answer`;
+        btnShow.addEventListener('click', revealIalaAnswer);
+        quizOptionsContainer.appendChild(btnShow);
+        return;
+    }
+
     const isDay = item.type === 'day';
     const card = cardsData[item.type][item.cardId];
     
@@ -767,19 +801,31 @@ function showResults() {
             resultsReviewList.innerHTML = '';
             
             missedCards.forEach(m => {
-                const card = cardsData[m.type][m.cardId];
                 const reviewItem = document.createElement('div');
                 reviewItem.className = 'review-card-item';
                 
-                const imgSrc = m.type === 'day' ? `images/day/DayImage${m.cardId}.gif` : `images/night/NightSignal${m.cardId}.gif`;
+                let imgSrc = '';
+                let titleText = '';
+                let identText = '';
+                
+                if (m.type === 'iala') {
+                    imgSrc = `images/iala/answer_${m.cardId}.png`;
+                    titleText = `IALA Card #${m.cardId}`;
+                    identText = `Buoyage shape and answer reference`;
+                } else {
+                    const card = cardsData[m.type][m.cardId];
+                    imgSrc = m.type === 'day' ? `images/day/DayImage${m.cardId}.gif` : `images/night/NightSignal${m.cardId}.gif`;
+                    titleText = `${m.type === 'day' ? 'Day' : 'Night'} Signal #${m.cardId}`;
+                    identText = card ? card.identification : '';
+                }
                 
                 reviewItem.innerHTML = `
                     <div class="review-card-thumb-wrapper">
                         <img class="signal-img" src="${imgSrc}" alt="Thumbnail">
                     </div>
                     <div>
-                        <strong>${m.type === 'day' ? 'Day' : 'Night'} Signal #${m.cardId}</strong>
-                        <p style="font-size: 0.82rem; color: var(--text-muted);">${card.identification}</p>
+                        <strong>${titleText}</strong>
+                        <p style="font-size: 0.82rem; color: var(--text-muted);">${identText}</p>
                     </div>
                 `;
                 resultsReviewList.appendChild(reviewItem);
@@ -803,4 +849,99 @@ function applyTrainerRotation() {
 
 function applyQuizRotation() {
     quizQuestionImg.style.transform = `rotate(${quizRotation}deg)`;
+}
+
+/* ==========================================================================
+   IALA SELF-GRADED QUIZ HELPER FUNCTIONS
+   ========================================================================== */
+
+function revealIalaAnswer() {
+    const item = currentQueue[currentIndex];
+    
+    // Change image to answer card
+    quizQuestionImg.src = `images/iala/answer_${item.cardId}.png`;
+    quizPromptText.textContent = "Review the answer sheet. Did you identify it correctly?";
+    
+    // Clear "Show Answer" and render "I Got It Right" and "I Got It Wrong"
+    quizOptionsContainer.innerHTML = '';
+    
+    // Button: Correct
+    const btnCorrect = document.createElement('button');
+    btnCorrect.type = 'button';
+    btnCorrect.className = 'option-btn correct';
+    btnCorrect.innerHTML = `
+        <span class="option-badge"><i class="fa-solid fa-check"></i></span>
+        <span class="option-text">I Got It Right</span>
+    `;
+    btnCorrect.style.marginBottom = '0.5rem';
+    btnCorrect.addEventListener('click', () => submitIalaGrade(true));
+    
+    // Button: Incorrect
+    const btnIncorrect = document.createElement('button');
+    btnIncorrect.type = 'button';
+    btnIncorrect.className = 'option-btn incorrect';
+    btnIncorrect.innerHTML = `
+        <span class="option-badge"><i class="fa-solid fa-xmark"></i></span>
+        <span class="option-text">I Got It Wrong</span>
+    `;
+    btnIncorrect.addEventListener('click', () => submitIalaGrade(false));
+    
+    quizOptionsContainer.appendChild(btnCorrect);
+    quizOptionsContainer.appendChild(btnIncorrect);
+}
+
+function submitIalaGrade(isCorrect) {
+    const item = currentQueue[currentIndex];
+    
+    // Disable self-grade buttons
+    const buttons = quizOptionsContainer.querySelectorAll('.option-btn');
+    buttons.forEach(btn => btn.disabled = true);
+    
+    if (isCorrect) {
+        quizScore++;
+        quizAnswers.push({
+            cardId: item.cardId,
+            type: item.type,
+            correct: true
+        });
+        
+        feedbackTitle.textContent = "Correct! Card Identified";
+        feedbackIcon.className = "fa-solid fa-circle-check";
+        quizFeedbackPanel.className = "feedback-panel correct-theme";
+    } else {
+        quizAnswers.push({
+            cardId: item.cardId,
+            type: item.type,
+            correct: false
+        });
+        
+        const missedKey = `${item.type}_${item.cardId}`;
+        if (!missedCards.some(m => m.key === missedKey)) {
+            missedCards.push({ cardId: item.cardId, type: item.type, key: missedKey });
+        }
+        
+        feedbackTitle.textContent = "Incorrect! Added to Review";
+        feedbackIcon.className = "fa-solid fa-circle-xmark";
+        quizFeedbackPanel.className = "feedback-panel incorrect-theme";
+    }
+    
+    // Show feedback panel with answer instructions
+    feedbackDescIdent.textContent = "Check the answer details shown on the left card image.";
+    feedbackDescAction.textContent = "-";
+    feedbackDescDay.textContent = "-";
+    feedbackDescFog.textContent = "-";
+    
+    const feedbackDayLabel = feedbackDescDay.previousElementSibling;
+    if (feedbackDayLabel) {
+        feedbackDayLabel.textContent = 'Day Shape:';
+    }
+    
+    quizFeedbackPanel.classList.remove('hidden');
+    
+    // Change button text on final question
+    if (currentIndex === currentQueue.length - 1) {
+        btnQuizContinue.innerHTML = `Finish & Score <i class="fa-solid fa-flag-checkered"></i>`;
+    } else {
+        btnQuizContinue.innerHTML = `Continue <i class="fa-solid fa-arrow-right"></i>`;
+    }
 }
