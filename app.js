@@ -154,6 +154,14 @@ function setupEventListeners() {
         groupQuizOptions.classList.add('hidden');
     });
 
+    btnModeQuiz.addEventListener('click', () => {
+        sessionMode = 'quiz';
+        btnModeQuiz.classList.add('active');
+        btnModeTrainer.classList.remove('active');
+        groupQuizOptions.classList.remove('hidden');
+        groupTrainerOptions.classList.add('hidden');
+    });
+
     // Start Session
     btnStartSession.addEventListener('click', startSession);
 
