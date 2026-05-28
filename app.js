@@ -9,9 +9,7 @@ let currentIndex = 0;
 let quizScore = 0;
 let quizAnswers = []; // { cardId, type, correct }
 let missedCards = []; // List of missed cardIds
-let selectedCategory = 'day'; // 'day' | 'night' | 'iala'
-let trainerRotation = 0;
-let quizRotation = 0;
+let selectedCategory = 'night'; // 'day' | 'night' | 'iala'
 
 // Step-wise Quiz state
 let quizCurrentStep = 1; // 1 | 2 | 3
@@ -31,8 +29,6 @@ const progressPercent = document.getElementById('progress-percent');
 const btnCatDay = document.getElementById('btn-cat-day');
 const btnCatNight = document.getElementById('btn-cat-night');
 const btnCatIala = document.getElementById('btn-cat-iala');
-const btnTrainerRotate = document.getElementById('btn-trainer-rotate');
-const btnQuizRotate = document.getElementById('btn-quiz-rotate');
 const trainerBackImageWrapper = document.getElementById('trainer-back-image-wrapper');
 const trainerBackImg = document.getElementById('trainer-back-img');
 const trainerBackScroll = document.getElementById('trainer-back-scroll');
@@ -71,6 +67,7 @@ const quizQuestionTypeBadge = document.getElementById('quiz-question-type-badge'
 const quizPromptText = document.getElementById('quiz-prompt-text');
 const quizOptionsContainer = document.getElementById('quiz-options-container');
 const quizFeedbackPanel = document.getElementById('quiz-feedback-panel');
+const quizFeedbackDetailsGrid = document.getElementById('quiz-feedback-details-grid');
 const feedbackIcon = document.getElementById('feedback-icon');
 const feedbackTitle = document.getElementById('feedback-title');
 const feedbackDescIdent = document.getElementById('feedback-desc-ident');
@@ -177,11 +174,6 @@ function setupEventListeners() {
     });
     btnTrainerPrev.addEventListener('click', () => navigateTrainer(-1));
     btnTrainerNext.addEventListener('click', () => navigateTrainer(1));
-    btnTrainerRotate.addEventListener('click', (e) => {
-        e.stopPropagation();
-        trainerRotation = (trainerRotation + 90) % 360;
-        applyTrainerRotation();
-    });
 
     // Keyboard navigation in Trainer Mode
     document.addEventListener('keydown', (e) => {
@@ -199,11 +191,6 @@ function setupEventListeners() {
     });
 
     // Quiz actions
-    btnQuizRotate.addEventListener('click', (e) => {
-        e.stopPropagation();
-        quizRotation = (quizRotation + 90) % 360;
-        applyQuizRotation();
-    });
     btnQuizContinue.addEventListener('click', loadNextQuizQuestion);
     btnResultsRetry.addEventListener('click', restartSession);
 }
@@ -390,9 +377,6 @@ function loadTrainerCard() {
     
     if (currentQueue.length === 0 || currentIndex >= currentQueue.length) return;
     
-    // Reset rotation when loading new card
-    trainerRotation = 0;
-    applyTrainerRotation();
 
     const item = currentQueue[currentIndex];
     const isIala = item.type === 'iala';
@@ -465,9 +449,6 @@ function loadTrainerCard() {
 
 function toggleCardFlip() {
     flashcard.classList.toggle('flipped');
-    // Reset rotation when flipping
-    trainerRotation = 0;
-    applyTrainerRotation();
 }
 
 function navigateTrainer(direction) {
@@ -525,9 +506,6 @@ const seenFromList = [
 ];
 
 function loadQuizQuestion() {
-    // Reset rotation
-    quizRotation = 0;
-    applyQuizRotation();
 
     // Hide feedback panel
     quizFeedbackPanel.classList.add('hidden');
@@ -748,6 +726,9 @@ function showQuizFeedback() {
     const card = cardsData[item.type][item.cardId];
     const isDay = item.type === 'day';
     
+    // Ensure details grid is visible for COLREGs
+    quizFeedbackDetailsGrid.classList.remove('hidden');
+    
     // Fill detailed feedback fields
     feedbackDescIdent.textContent = card.identification || '-';
     feedbackDescAction.textContent = card.action || '-';
@@ -850,14 +831,6 @@ function showResults() {
     }
 }
 
-function applyTrainerRotation() {
-    trainerImg.style.transform = `rotate(${trainerRotation}deg)`;
-    trainerBackImg.style.transform = `rotate(${trainerRotation}deg)`;
-}
-
-function applyQuizRotation() {
-    quizQuestionImg.style.transform = `rotate(${quizRotation}deg)`;
-}
 
 /* ==========================================================================
    IALA SELF-GRADED QUIZ HELPER FUNCTIONS
@@ -933,16 +906,8 @@ function submitIalaGrade(isCorrect) {
         quizFeedbackPanel.className = "feedback-panel incorrect-theme";
     }
     
-    // Show feedback panel with answer instructions
-    feedbackDescIdent.textContent = "Check the answer details shown on the left card image.";
-    feedbackDescAction.textContent = "-";
-    feedbackDescDay.textContent = "-";
-    feedbackDescFog.textContent = "-";
-    
-    const feedbackDayLabel = feedbackDescDay.previousElementSibling;
-    if (feedbackDayLabel) {
-        feedbackDayLabel.textContent = 'Day Shape:';
-    }
+    // Hide details grid for IALA since all info is in the answer image
+    quizFeedbackDetailsGrid.classList.add('hidden');
     
     quizFeedbackPanel.classList.remove('hidden');
     

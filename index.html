@@ -11,7 +11,7 @@
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Outfit:wght@400;500;600;700;800&display=swap" rel="stylesheet">
     <!-- FontAwesome for beautiful icons -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <link rel="stylesheet" href="app.css?v=202605282115">
+    <link rel="stylesheet" href="app.css?v=202605282123">
 </head>
 <body>
     <!-- Background elements for depth -->
@@ -119,9 +119,7 @@
                     <button id="btn-trainer-flip" class="btn btn-accent">
                         <i class="fa-solid fa-rotate"></i> Flip Card
                     </button>
-                    <button id="btn-trainer-rotate" class="btn btn-secondary" title="Rotate image">
-                        <i class="fa-solid fa-rotate-right"></i> Rotate
-                    </button>
+
                     <button id="btn-trainer-next" class="btn btn-primary">
                         Next <i class="fa-solid fa-arrow-right"></i>
                     </button>
@@ -139,9 +137,7 @@
                         <div class="quiz-meta-row">
                             <span id="quiz-card-number-label" class="card-id-label">Night Signal #15</span>
                             <span id="quiz-question-type-badge" class="badge badge-teal">Night Signal</span>
-                            <button id="btn-quiz-rotate" class="btn-icon-text text-btn" title="Rotate image">
-                                <i class="fa-solid fa-rotate-right"></i> <span>Rotate</span>
-                            </button>
+
                         </div>
                     </div>
 
@@ -165,7 +161,7 @@
                             <span id="feedback-title">Correct!</span>
                         </div>
                         
-                        <div class="feedback-details-grid">
+                        <div id="quiz-feedback-details-grid" class="feedback-details-grid">
                             <div class="detail-box">
                                 <strong>Vessel Aspect:</strong>
                                 <span id="feedback-desc-ident">-</span>
@@ -272,18 +268,18 @@
                 <div class="form-group">
                     <label class="section-label">Select Category</label>
                     <div class="toggle-buttons-group">
-                        <button type="button" id="btn-cat-day" class="toggle-btn active">
-                            <i class="fa-solid fa-sun"></i>
-                            <div>
-                                <strong>Day Signals</strong>
-                                <span>Day Shapes and Collision Regulation Signals (1–30).</span>
-                            </div>
-                        </button>
-                        <button type="button" id="btn-cat-night" class="toggle-btn">
+                        <button type="button" id="btn-cat-night" class="toggle-btn active">
                             <i class="fa-solid fa-moon"></i>
                             <div>
                                 <strong>Night Signals</strong>
                                 <span>Night Lights and Collision Regulation Signals (1–225).</span>
+                            </div>
+                        </button>
+                        <button type="button" id="btn-cat-day" class="toggle-btn">
+                            <i class="fa-solid fa-sun"></i>
+                            <div>
+                                <strong>Day Signals</strong>
+                                <span>Day Shapes and Collision Regulation Signals (1–30).</span>
                             </div>
                         </button>
                         <button type="button" id="btn-cat-iala" class="toggle-btn">
@@ -380,6 +376,6 @@
     </div>
 
     <!-- JS Scripts -->
-    <script src="app.js?v=202605282115"></script>
+    <script src="app.js?v=202605282123"></script>
 </body>
 </html>
