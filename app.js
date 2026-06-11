@@ -439,13 +439,19 @@ function loadTrainerCard() {
         }
     }
     
+    // Reset onerror handlers to prevent race conditions from previously aborted image loads
+    trainerImg.onerror = null;
+    
     // Fallback if image doesn't exist
-    trainerImg.onerror = () => {
-        trainerImg.src = 'data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="284" height="180" viewBox="0 0 284 180"><rect width="100%" height="100%" fill="%23111"/><text x="50%" y="50%" dominant-baseline="middle" text-anchor="middle" fill="%23555" font-family="sans-serif" font-size="14">Image Missing</text></svg>';
+    trainerImg.onerror = function() {
+        this.onerror = null; // Prevent infinite loops
+        this.src = 'data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="284" height="180" viewBox="0 0 284 180"><rect width="100%" height="100%" fill="%23111"/><text x="50%" y="50%" dominant-baseline="middle" text-anchor="middle" fill="%23555" font-family="sans-serif" font-size="14">Image Missing</text></svg>';
     };
     if (isIala) {
-        trainerBackImg.onerror = () => {
-            trainerBackImg.src = 'data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="284" height="180" viewBox="0 0 284 180"><rect width="100%" height="100%" fill="%23111"/><text x="50%" y="50%" dominant-baseline="middle" text-anchor="middle" fill="%23555" font-family="sans-serif" font-size="14">Image Missing</text></svg>';
+        trainerBackImg.onerror = null;
+        trainerBackImg.onerror = function() {
+            this.onerror = null; // Prevent infinite loops
+            this.src = 'data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="284" height="180" viewBox="0 0 284 180"><rect width="100%" height="100%" fill="%23111"/><text x="50%" y="50%" dominant-baseline="middle" text-anchor="middle" fill="%23555" font-family="sans-serif" font-size="14">Image Missing</text></svg>';
         };
     }
 
@@ -590,8 +596,10 @@ function loadQuizQuestion() {
         quizQuestionTypeBadge.className = 'badge';
     }
 
-    quizQuestionImg.onerror = () => {
-        quizQuestionImg.src = 'data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="284" height="180" viewBox="0 0 284 180"><rect width="100%" height="100%" fill="%23111"/><text x="50%" y="50%" dominant-baseline="middle" text-anchor="middle" fill="%23555" font-family="sans-serif" font-size="14">Image Missing</text></svg>';
+    quizQuestionImg.onerror = null;
+    quizQuestionImg.onerror = function() {
+        this.onerror = null; // Prevent infinite loops
+        this.src = 'data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="284" height="180" viewBox="0 0 284 180"><rect width="100%" height="100%" fill="%23111"/><text x="50%" y="50%" dominant-baseline="middle" text-anchor="middle" fill="%23555" font-family="sans-serif" font-size="14">Image Missing</text></svg>';
     };
 
     // Load first step
