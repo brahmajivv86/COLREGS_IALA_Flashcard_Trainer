@@ -264,7 +264,7 @@
       "seen_from": "seen from port side"
     },
     "4": {
-      "identification": "P.D. v/l seen end on - a) Probably 50 m. or more underway. b) less than 50 m. towing or pushing underway two 200 m. or less.",
+      "identification": "P.D. v/l seen end on - a) Probably 50 m. or more underway. b) less than 50 m. towing or pushing underway tow 200 m. or less.",
       "action": "One short blast a/c to stbd.",
       "day_signal": "No day signal.",
       "fog_signal": "a) Making way - One prolonged blast. Stopped - Two prolonged blasts with 2 secs. interval in between.",
@@ -282,13 +282,13 @@
       "seen_from": "seen end on"
     },
     "6": {
-      "identification": "P.D. v/l less than 50 m or more underway seen from stbd side.",
+      "identification": "P.D. v/l less than 50 m or more underway seen from port side.",
       "action": "One short blast a/c to stbd.",
       "day_signal": "No day signal.",
       "fog_signal": "Making way - One prolonged blast Snopped - Two prolonged blasts with 2 secs intervat in between.",
       "type_of_vessel": "Power-Driven Vessel (P/D Vsl)",
       "maneuvering_status": "Underway (Making Way)",
-      "seen_from": "seen from starboard side"
+      "seen_from": "seen from port side"
     },
     "7": {
       "identification": "a) v/I probably 50 m. or more but less than 100 m. at anchor, seen from ahead or astern. b) P.D. v/I probably 50 m. or more underway seen end on, out of range of side lignts. c) P.D. v/I towing or pushing less than 50 m. underway, tow 200 m. or less, out of range of side lights.",
@@ -1776,7 +1776,7 @@
       "seen_from": "seen from starboard side"
     },
     "174": {
-      "identification": "P.D. v/I towing less than 50 m. underway tow exceeds 200 m. or less R.A.M. seen from port side.",
+      "identification": "P.D. v/I towing less than 50 m. underway tow exceeds 200 m. R.A.M. seen from port side.",
       "action": "One short blast a/c to stbd.",
       "day_signal": "Ball, diamond and ball in vertical line and also a diamond.",
       "fog_signal": "One prolonged and two short blasts.",
@@ -1803,7 +1803,7 @@
       "seen_from": "seen from starboard side"
     },
     "173": {
-      "identification": "P.D. v/I towing less than 50 m. underway tow exceeds 200 m. or less R.A.M. seen from stbd side.",
+      "identification": "P.D. v/I towing less than 50 m. underway tow exceeds 200 m. R.A.M. seen from stbd side.",
       "action": "Two short blasts a/c to port.",
       "day_signal": "Ball, diamond and ball in vertical line and also a diamond.",
       "fog_signal": "One prolonged and two short blasts.",
