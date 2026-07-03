@@ -28,42 +28,29 @@ A premium, interactive web application designed to help seafarers master the **R
 
 ---
 
-## 🛠️ Testing the Application Locally
+## 🛠️ How to Run Locally
 
-You can test and run this application locally using either of the following two methods:
-
-### Method 1: Using the Deployment Package (`github_upload` folder)
-The `github_upload` folder contains all self-contained files (HTML, CSS, JS, and image assets) needed to run the app. 
+If you clone or download this repository to run it on your own computer, you will need to host it using a local static web server.
 
 > [!IMPORTANT]
-> Because the browser blocks loading the local database file `cards.json` directly from the filesystem (via `file://` protocol) due to security policies (CORS), you **cannot** simply double-click the `index.html` file in your browser. You must host it using a local static server.
+> Because modern web browsers block loading the local database file (`cards.json`) directly from the filesystem (via the `file://` protocol) due to security policies (CORS), you **cannot** run this app by simply double-clicking the `index.html` file.
 
-To host and test it locally:
+To host and run it locally:
+
 1.  **Using Python (Quickest):**
-    *   Open your terminal/command prompt.
-    *   Navigate to the `github_upload` folder:
-        ```bash
-        cd github_upload
-        ```
+    *   Open your terminal or command prompt in the project folder.
     *   Start a lightweight static server:
         ```bash
         python -m http.server 8000
         ```
-    *   Open your browser and navigate to: `http://localhost:8000`
+    *   Open your web browser and navigate to: `http://localhost:8000`
+
 2.  **Using VS Code Live Server:**
-    *   Open the `github_upload` folder in VS Code.
+    *   Open the project folder in VS Code.
     *   Right-click `index.html` and select **Open with Live Server**.
 
----
-
-### Method 2: Development Environment Setup
-If you are running the project from the root folder during development:
-1.  Double-click `run.bat` or run the following command in your terminal:
-    ```bash
-    python server.py
-    ```
-2.  This launches a custom local python HTTP server at `http://localhost:8000` which maps the `/images/day/` and `/images/night/` requests to your local study resources directory.
-3.  The application will automatically open in your default browser.
+3.  **Using Node.js:**
+    *   Run `npx serve` inside the folder.
 
 ---
 
