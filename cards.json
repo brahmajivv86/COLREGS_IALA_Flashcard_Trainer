@@ -39,7 +39,7 @@
     "6": {
       "identification": "S.V. underway, also propelled by machinery, seen from port side.",
       "action": "One short blast, a/c to stbd.",
-      "lights_displayed": "a) Masthead its ford and aft. b) Side its and stern light. c) Length < 50 m - aft masthead it not compulsory.",
+      "lights_displayed": "a) Masthead lights forward and aft. b) Side lights and stern light. c) Length < 50 m - aft masthead light not compulsory.",
       "fog_signal": "a) Making way - one prolonged blast. b) Stopped - two prolonged blasts with two secs. interval in between",
       "type_of_vessel": "Sailing Vessel",
       "maneuvering_status": "Underway (Making Way)",
@@ -282,10 +282,10 @@
       "seen_from": "seen end on"
     },
     "6": {
-      "identification": "P.D. v/l less than 50 m or more underway seen from port side.",
+      "identification": "P.D. vsl probably 50 m or more in length underway seen from port side.",
       "action": "One short blast a/c to stbd.",
       "day_signal": "No day signal.",
-      "fog_signal": "Making way - One prolonged blast Snopped - Two prolonged blasts with 2 secs intervat in between.",
+      "fog_signal": "Making way - One prolonged blast. Stopped - Two prolonged blasts with 2 secs interval in between.",
       "type_of_vessel": "Power-Driven Vessel (P/D Vsl)",
       "maneuvering_status": "Underway (Making Way)",
       "seen_from": "seen from port side"
@@ -309,10 +309,10 @@
       "seen_from": "seen from port side"
     },
     "5": {
-      "identification": "P.D. v/l less than 50 m or more underway seen from stbd side.",
+      "identification": "P.D. vsl probably 50 m or more in length underway seen from stbd side.",
       "action": "Maintain course and speed.",
       "day_signal": "No day signal.",
-      "fog_signal": "Making way - One prolonged blast Snopped - Two prolonged blasts with 2 secs intervat in between.",
+      "fog_signal": "Making way - One prolonged blast. Stopped - Two prolonged blasts with 2 secs interval in between.",
       "type_of_vessel": "Power-Driven Vessel (P/D Vsl)",
       "maneuvering_status": "Underway (Making Way)",
       "seen_from": "seen from starboard side"
@@ -1130,7 +1130,7 @@
     "104": {
       "identification": "Trawler underway but stopped or at anchor, nets fast on an obstruction.",
       "action": "One short blast a/c to stbd.",
-      "day_signal": "Two cones with apexes together in vertical line.",
+      "day_signal": "Two cones with apexes together in vertical line. Also flag P.",
       "fog_signal": "One prolonged and two short blasts.",
       "type_of_vessel": "Trawler",
       "maneuvering_status": "Dredging / Obstruction operations",
@@ -1938,8 +1938,8 @@
       "seen_from": "seen from starboard side"
     },
     "200": {
-      "identification": "Dredger / uwo probably 50 m. or more R.A.M. with obstruction on port side making way seen end on.",
-      "action": "Two short blasts a/c to port.",
+      "identification": "Dredger / vessel engaged in underwater operations, probably 50 m or more, R.A.M., with obstruction on starboard side, making way seen from starboard side.",
+      "action": "One short blast a/c to stbd.",
       "day_signal": "Ball, diamond and ball in vertical line. Also two diamonds in vertical line on safe side and two balls in vertical line on obstruction side.",
       "fog_signal": "One prolonged and two short blasts.",
       "type_of_vessel": "Power-Driven Vessel (P/D Vsl)",
@@ -2073,8 +2073,8 @@
       "seen_from": "seen from astern"
     },
     "213": {
-      "identification": "Mine clearance v/I probably 50 m. or more underway seen from stbd side.",
-      "action": "Two short blasts a/c to stbd and pass more than 1000 m.",
+      "identification": "Mine clearance vessel, probably 50 m or more, underway seen from starboard side.",
+      "action": "Two short blasts a/c to port and pass more than 1000 m.",
       "day_signal": "Three balls - one at foremast head and one at each end of fore yard.",
       "fog_signal": "One prolonged and two short blasts.",
       "type_of_vessel": "Mine Clearance Vessel",
